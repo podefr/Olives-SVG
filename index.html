@@ -21,13 +21,14 @@
 	      	</g>
 	      	
 	      	<g class="chart">
-	      	
+	      		<polygon points="" data-line="bind: drawLine, line" />
 	      	</g>
 	      	
 		</svg>
 		
-		<form>
-			
+		<form data-event="listen: submit, addPoint">
+			<input placeholder="0-200"/>
+			<input type="submit" />
 		</form>
 		
 		<script src="libs/require.js"></script>
@@ -39,15 +40,43 @@
 		<script src="js/form.js"></script>
 		<script>
 		
-			require(["OSVG/Chart", "OSVG/Grid", "Store", "OSVG/Tools", "OSVG/form"], function (Chart, Grid, Store, Tools, Form) {
+			require(["OSVG/Chart", "OSVG/Grid", "Store", "OSVG/Tools", "OSVG/form", "Observable"], function (Chart, Grid, Store, Tools, Form, Observable) {
 				
 				var gridY = new Store(Tools.pad([], 20, 10)),
-					gridX = new Store(Tools.pad([], 30, 20)),
-					chart = new Store([]);
+					gridX = new Store(Tools.pad([], 0, 0)),
+					chart = new Store({line: [
+				                	[0, 200],
+				                	[20, 190],
+				                	[40, 50],
+				                	[60, 160],
+				                	[80, 140],
+				                	[100, 100],
+				                	[120, 80],
+				                	[140, 100],
+				                	[160, 120],
+				                	[160, 200]
+					           	]}),
+					observable = new Observable;
 
 				Grid(document.querySelector(".grid"), gridX, gridY);
 				Chart(document.querySelector(".chart"), chart);
-				Form(document.querySelector("form"), chart);
+				Form(document.querySelector("form"), observable);
+				
+				observable.watch("newValue", function (val) {
+					if (val >= 0 && val <= 200) {
+						// First, get the array that discribes the line (polygon)
+						var line = chart.get("line"),
+						// We remove the last point which is just to terminate the polygon
+						lastValue = line.pop();
+						
+						// We add the new point, substracted to 200 because of the 'inverted' y axis
+						line.push([lastValue[0]+20, 200-val]);
+						// And the terminating point
+						line.push([lastValue[0]+20, 200]);
+						
+						chart.set("line", line);
+					}
+				});
 			});
 			
 		</script>

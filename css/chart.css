@@ -31,3 +31,8 @@ svg {
 .grid line {
 	stroke: #aaa;
 }
+
+.chart polygon {
+	stroke: #0c0;
+	fill: rgba(0,102,0,0.8);
+}

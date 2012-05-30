@@ -1,16 +1,21 @@
 define("OSVG/form", 
 		
-["Olives/OObject", "Olives/Model-plugin"],	
+["Olives/OObject", "Olives/Model-plugin", "Olives/Event-plugin"],	
 
-function (OObject, ModelPlugin) {
+function (OObject, ModelPlugin, EventPlugin) {
 	
-	return function (view, model) {
+	return function (view, observable) {
 	
-		var form = new OObject(model);
+		var form = new OObject;
 		
-		form.plugins.add("form", new ModelPlugin(model));
+		form.plugins.add("event", new EventPlugin(form));
 		
 		form.alive(view);
+		
+		form.addPoint = function (event) {
+			event.preventDefault();
+			observable.notify("newValue", view.querySelector("input").value);
+		};
 		
 		return form;
 	};
