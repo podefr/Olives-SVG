@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Olives + SVG charting</title>
+		<link rel="stylesheet" type="text/css" href="css/chart.css">
+	</head>
+	<body>
+	
+		<h1>Olives + SVG charting demo</h1>
+	
+		<svg  xmlns="http://www.w3.org/2000/svg"
+	      xmlns:xlink="http://www.w3.org/1999/xlink">
+	      
+	      	<g class="grid">
+	      		<g data-gridX="foreach">
+	      			<line x1 y1="0" x2 y2="200" data-gridx="bind: x1; bind: x2" />
+	      		</g>
+	      		<g data-gridY="foreach">
+	      			<line x1="0" y1 x2="600" y2 data-gridy="bind: y1; bind: y2" />
+	      		</g>
+	      	</g>
+	      	
+	      	<g class="chart">
+	      	
+	      	</g>
+	      	
+		</svg>
+		
+		<form>
+			
+		</form>
+		
+		<script src="libs/require.js"></script>
+		<script src="libs/emily.js"></script>
+		<script src="libs/olives.js"></script>
+		<script src="js/tools.js"></script>
+		<script src="js/chart.js"></script>
+		<script src="js/grid.js"></script>
+		<script src="js/form.js"></script>
+		<script>
+		
+			require(["OSVG/Chart", "OSVG/Grid", "Store", "OSVG/Tools", "OSVG/form"], function (Chart, Grid, Store, Tools, Form) {
+				
+				var gridY = new Store(Tools.pad([], 20, 10)),
+					gridX = new Store(Tools.pad([], 30, 20)),
+					chart = new Store([]);
+
+				Grid(document.querySelector(".grid"), gridX, gridY);
+				Chart(document.querySelector(".chart"), chart);
+				Form(document.querySelector("form"), chart);
+			});
+			
+		</script>
+		
+	</body>
+</html>
