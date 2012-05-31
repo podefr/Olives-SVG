@@ -14,10 +14,10 @@
 	      xmlns:xlink="http://www.w3.org/1999/xlink">
 	      
 	      	<g class="grid">
-	      		<g data-gridX="foreach">
+	      		<g data-gridx="foreach">
 	      			<line x1 y1="0" x2 y2="200" data-gridx="bind: x1; bind: x2" />
 	      		</g>
-	      		<g data-gridY="foreach">
+	      		<g data-gridy="foreach">
 	      			<line x1="0" y1 x2="600" y2 data-gridy="bind: y1; bind: y2" />
 	      		</g>
 	      	</g>
@@ -50,7 +50,7 @@
 				gridX = new Store(Tools.pad([], 0, 0)),
 				// "cached" chart values
 				chart = new Store({
-							line: [ 160, 50, 130, 140, 100, 80, 100, 120 ]
+							line: [ 43, 65, 87, 83, 79, 101, 102, 95 ]
 					    }),
 				// A mediator would be better for inter UI communication but
 				// a bit overkill just now
@@ -78,7 +78,7 @@
 						}
 
 						// We add the new point, substracted to 200 because of the 'inverted' y axis
-						line.push(200-val);
+						line.push(val);
 						
 						chart.set("line", line);
 					}
