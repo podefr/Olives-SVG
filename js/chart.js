@@ -15,7 +15,7 @@ function (OObject, ModelPlugin) {
 				
 				// We create a new array that adds x coordinates
 				points.forEach(function (val, idx) {
-					newPoints.push([idx*20, val]);
+					newPoints.push([idx*20, 200-val]);
 				});
 				
 				// It also have "terminating points"

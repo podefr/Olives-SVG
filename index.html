@@ -50,7 +50,7 @@
 				gridX = new Store(Tools.pad([], 0, 0)),
 				// "cached" chart values
 				chart = new Store({
-							line: [ 160, 50, 130, 140, 100, 80, 100, 120 ]
+							line: [ 43, 65, 87, 83, 79, 101, 102, 95 ]
 					    }),
 				// A mediator would be better for inter UI communication but
 				// a bit overkill just now
@@ -78,7 +78,7 @@
 						}
 
 						// We add the new point, substracted to 200 because of the 'inverted' y axis
-						line.push(200-val);
+						line.push(val);
 						
 						chart.set("line", line);
 					}
