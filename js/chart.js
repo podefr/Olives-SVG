@@ -10,7 +10,19 @@ function (OObject, ModelPlugin) {
 		
 		chart.plugins.add("line", new ModelPlugin(model, {
 			drawLine: function (points) {
-				this.setAttribute("points", points.join(" "));
+				
+				var newPoints = [];
+				
+				// We create a new array that adds x coordinates
+				points.forEach(function (val, idx) {
+					newPoints.push([idx*20, val]);
+				});
+				
+				// It also have "terminating points"
+				newPoints.unshift([0, 200]);
+				newPoints.push([newPoints[newPoints.length-1][0], 200]);
+				
+				this.setAttribute("points", newPoints.join(" "));
 			}
 		}));
 		
