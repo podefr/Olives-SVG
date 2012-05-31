@@ -1,12 +1,16 @@
 body {
 	background-color: #323232;
 	text-align: center;
+	color: #aaa;
+	font-family: "Helvetica"
+}
+
+a {
+	color: #aaa;
 }
 
 h1 {
 	text-shadow: 1px 1px 1px rgba(102,102,102,1);
-	color: #aaa;
-	font-family: "Helvetica"
 }
 
 svg {
@@ -28,11 +32,20 @@ svg {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
 }
 
+form {
+	margin: 20px;
+}
+
+
 .grid line {
 	stroke: #aaa;
 }
 
-.chart polygon {
+.chart polyline {
 	stroke: #0c0;
 	fill: rgba(0,102,0,0.8);
+}
+
+footer {
+	font-size: 12x;
 }
