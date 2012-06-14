@@ -10,7 +10,6 @@ function (OObject, ModelPlugin) {
 		
 		chart.plugins.add("line", new ModelPlugin(model, {
 			drawLine: function (points) {
-				
 				var newPoints = [];
 				
 				// We create a new array that adds x coordinates

@@ -23,7 +23,7 @@
 	      	</g>
 	      	
 	      	<g class="chart">
-	      		<polyline points="" data-line="bind: drawLine, line" />
+	      		<polyline points="" data-line="bind: drawLine, 0.value" />
 	      	</g>
 	      	
 		</svg>
@@ -33,6 +33,7 @@
 			<input type="submit" />
 		</form>
 		
+		<script src="/socket.io/socket.io.js"></script>
 		<script src="libs/require.js"></script>
 		<script src="libs/Emily.js"></script>
 		<script src="libs/Olives.js"></script>
@@ -42,47 +43,54 @@
 		<script src="js/form.js"></script>
 		<script>
 		
-			require(["OSVG/Chart", "OSVG/Grid", "Store", "OSVG/Tools", "OSVG/form", "Observable"], function (Chart, Grid, Store, Tools, Form, Observable) {
+			require(["OSVG/Chart", "OSVG/Grid", "Olives/Transport", "Store", "CouchDBStore", "OSVG/Tools", "OSVG/form", "Observable"], 
 				
-				// This is the vertical graduation
-				var gridY = new Store(Tools.pad([], 20, 10)),
-				// This is the horizontal graduation
-				gridX = new Store(Tools.pad([], 0, 0)),
-				// "cached" chart values
-				chart = new Store({
-							line: [ 43, 65, 87, 83, 79, 101, 102, 95 ]
-					    }),
-				// A mediator would be better for inter UI communication but
-				// a bit overkill just now
-				observable = new Observable;
-
-				// Initializes the Grid UI by giving a view and additional params
-				Grid(document.querySelector(".grid"), gridX, gridY);
+				function (Chart, Grid, Transport, Store, CouchDBStore, Tools, Form, Observable) {
 				
-				// Then the chart by giving a view and a model
-				Chart(document.querySelector(".chart"), chart);
-				
-				// And init the form
-				Form(document.querySelector("form"), observable);
-				
-				// The mediator would be used here
-				observable.watch("newValue", function (val) {
-					if (val >= 0 && val <= 200) {
-						// First, get the array that discribes the line (polygon)
-						var line = chart.get("line");
-						
-						// If there's no more space left
-						if (line.length > 30) {
-							// Remove the first point
-							line.shift();
+					// This is the vertical graduation
+					var gridY = new Store(Tools.pad([], 20, 10)),
+					// This is the horizontal graduation
+					gridX = new Store(Tools.pad([], 0, 0)),
+					// "cached" chart values
+					chart = new CouchDBStore,
+					// A mediator would be better for inter UI communication but
+					// a bit overkill just now
+					observable = new Observable,
+					
+					transport = new Transport(io, location.href);
+					
+					chart.setTransport(transport);
+					chart.sync("graphdata", "list", "id", {
+						descending: true
+					});
+	
+					// Initializes the Grid UI by giving a view and additional params
+					Grid(document.querySelector(".grid"), gridX, gridY);
+					
+					// Then the chart by giving a view and a model
+					Chart(document.querySelector(".chart"), chart);
+					
+					// And init the form
+					Form(document.querySelector("form"), observable);
+					
+					// The mediator would be used here
+					observable.watch("newValue", function (val) {
+						if (val >= 0 && val <= 200) {
+							// First, get the array that discribes the line (polygon)
+							var line = chart.get(0).value;
+							
+							// If there's no more space left
+							if (line.length > 30) {
+								// Remove the first point
+								line.shift();
+							}
+	
+							// We add the new point.
+							line.push(val);
+							
+							chart.set("line", line);
 						}
-
-						// We add the new point, substracted to 200 because of the 'inverted' y axis
-						line.push(val);
-						
-						chart.set("line", line);
-					}
-				});
+					});
 			});
 			
 		</script>
