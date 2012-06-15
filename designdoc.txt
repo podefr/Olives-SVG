@@ -1,0 +1,16 @@
+// Place this document into your "graphdata" db
+// and name it _design/list
+
+{
+   "_id": "_design/list",
+   "_rev": "29-13936c712ac6af4d7c8cd94085a45b92",
+   "views": {
+       "id": {
+           "map": "function (doc) { emit(null, doc.value) }"
+       }
+   },
+   "language": "javascript",
+   "lists": {
+       "limit": "function (head, req) {  var arr = [], row,  i=0; for (; i<req.query.limit; i++) {  arr.push(getRow().value);  }   send(JSON.stringify( { \"rows\" : [ arr.reverse() ] } ))}"
+   }
+}
