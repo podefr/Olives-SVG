@@ -23,7 +23,7 @@
 	      	</g>
 	      	
 	      	<g class="chart">
-	      		<polyline points="" data-line="bind: drawLine, 0.value" />
+	      		<polyline points="" data-line="bind: drawLine, 0" />
 	      	</g>
 	      	
 		</svg>
@@ -62,8 +62,9 @@
 					transport = new Transport(io, location.href);
 					
 					chart.setTransport(transport);
-					chart.sync("graphdata", "list", "id", {
-						descending: true
+					chart.sync("graphdata", "list", "_list/limit/id", {
+						descending: true,
+						limit: 31,
 					});
 	
 					// Initializes the Grid UI by giving a view and additional params
@@ -89,8 +90,7 @@
 						}
 					});
 					
-					hop = new CouchDBStore;
-					hop.setTransport(transport);
+					ch = chart
 			});
 			
 		</script>
