@@ -53,6 +53,8 @@
 					gridX = new Store(Tools.pad([], 0, 0)),
 					// "cached" chart values
 					chart = new CouchDBStore,
+					// A store that will be reused for sending data to the db
+					newValue = new CouchDBStore,
 					// A mediator would be better for inter UI communication but
 					// a bit overkill just now
 					observable = new Observable,
@@ -73,24 +75,22 @@
 					// And init the form
 					Form(document.querySelector("form"), observable);
 					
+					newValue.setTransport(transport);
+					newValue.sync("graphdata", Date.now()+"");
+					
 					// The mediator would be used here
 					observable.watch("newValue", function (val) {
 						if (val >= 0 && val <= 200) {
-							// First, get the array that discribes the line (polygon)
-							var line = chart.get(0).value;
-							
-							// If there's no more space left
-							if (line.length > 30) {
-								// Remove the first point
-								line.shift();
-							}
-	
-							// We add the new point.
-							line.push(val);
-							
-							chart.set("line", line);
+							newValue.set("value", val);
+							newValue.upload().then(function () {
+								newValue.unsync();
+								newValue.sync("graphdata", Date.now()+"");
+							});
 						}
 					});
+					
+					hop = new CouchDBStore;
+					hop.setTransport(transport);
 			});
 			
 		</script>
